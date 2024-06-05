@@ -21,9 +21,9 @@ int main()
     ifstream arqin; // var de leitura do arquivo
     string nomearq = "biblioteca.txt"; // nome do arquivo
     bool continua = true, running = true; // flag da repetição principal
-    string busca;
+    string busca; // pesquisa (titulo, autor genero)
     int answer, x, op; // seleção de opção
-    int i=0, j=0; // contador
+    int i=0; // contador
 
     cout << "Bem-vindos ao Imersos, como posso ajudar?" << endl;
 
@@ -33,78 +33,64 @@ int main()
         cout << endl << "1. Cadastrar livro" << endl;
         cout << "2. Mostrar inventario" << endl;
         cout << "3. Pesquisar" << endl;
+        cout << "4. Sair do sistema" << endl;
         cout << endl << "Selecione uma opcao: ";
         cin >> answer;
 
         // Começa a operação da opção selecionada (1, 2 ou 3)
         switch(answer)
         {
-            case 1: // Cadastramento do livro
+            // Cadastramento do livro
+            case 1: 
 
                 // Repetição do cadastramento caso seja desejado
                 while(running)
                 {   
 					arqout.open(nomearq.c_str(), ofstream::out);
 
-                    cout << endl << "Titulo: " << endl;
+                    cout << endl << "Titulo: ";
                     getline(cin >> ws, cad_livro[i].titulo);
 
-                    cout << "Autor: " << endl;
+                    cout << "Autor: ";
                     getline(cin >> ws, cad_livro[i].autor);
 
-                    cout << "Edicao: " << endl;
+                    cout << "Edicao: ";
                     getline(cin >> ws, cad_livro[i].edicao);
 
-                    cout << "Genero: " << endl;
+                    cout << "Genero: ";
                     getline(cin >> ws, cad_livro[i].genero);
 
-                    cout << "Sinopse: " << endl;
+                    cout << "Sinopse: ";
                     getline(cin >> ws, cad_livro[i].sinopse);
-                    i++;
-
+                    i++; /* -> Percorre as linhas, caso não tivesse o 'i++' i seria so igual a zero, 
+                    logo so ia percorrer cad_livro[i].titulo, com o i++ ele percorre os outros
+                    cad_livro */
                     arqout.close();
 
-                    cout << "Deseja cadastrar mais um livro? (1- sim / 2- nao) " << endl;
-
-                    // Controla as respostas válidas, caso não seja 1 ou 2 aparecerá uma mensagem
-                    do
-                    {
-                        cin >> x;
-                        if(x!=1 && x!=2)
-                            cout << "Opção invalida, tente novamente: ";  
-                    }while(x!=1 && x!=2);
-                    
-                    // Repete as informaçãos paar um novo cadastro ou sai pro menu principal
-                    switch(x)
-                    {
-                        case 1:
-                            running = true;
-                        break;
-
-                        case 2:
-                            running = false;
-                        break;
-                    }
+                    running = false;
                 }
 
             break;
 
-            case 2: // Mostrar inventário
-                i=0;
+            // Mostrar inventário
+            case 2: 
+                i=0; // zera o 'i' por conta do 'i++' mais acima
+
                 // Abrindo arquivo pra leitura
                 arqin.open(nomearq.c_str(), ifstream::in);
 
-                // Lendo dados do arquivo
+                // Leitura e contagem da quantidade de 'titulos' cadastrados
                 while(!arqin.eof())
                 {
                     getline(arqin >> ws, cad_livro[i].titulo);
-                    i++;
+                    i++; 
                 }
                 
                 cout << "Total de livros: " << i << endl;
 
                 i=0;
 
+                // Leitura do arquivo
                 while(!arqin.eof())
                 {
                     getline(arqin >> ws, cad_livro[i].titulo);
@@ -117,22 +103,28 @@ int main()
                     cout << "Genero: " << cad_livro[i].genero << endl;
                     getline(arqin >> ws, cad_livro[i].sinopse);
                     cout << "Sinopse: " << cad_livro[i].sinopse << endl;
-                    i++;
+                    i++; // percorre as linhas
                 }
 
                 // Fechando arquivo
                 arqin.close();
             break;
 
-            case 3: // Pesquisar (por Titulo, Autor ou Genero)
+            // Pesquisa (Titulo, Autor, Genero)
+            case 3: 
+
+                cout << endl << "Selecione o tipo de pesquisa: (1- Titulo / 2- Autor / 3- Genero)" << endl;
                 cin >> op;
                 
                 i=0;
 
+                cout << endl << "Busca: ";
                 getline(cin >> ws, busca);
 
+                // Separa a pesquisa por tipo
                 switch(op)
                 {
+                    // Pesquisa por Titulo
                     case 1:
                         arqin.open(nomearq.c_str(), ifstream::in);
 
@@ -160,6 +152,7 @@ int main()
                         arqin.close();
                     break;
 
+                    // Pesquisa por Autor
                     case 2:
                         arqin.open(nomearq.c_str(), ifstream::in);
 
@@ -187,6 +180,7 @@ int main()
                         arqin.close();
                     break;
 
+                    // Pesquisa por Genero
                     case 3:
                         arqin.open(nomearq.c_str(), ifstream::in);
 
